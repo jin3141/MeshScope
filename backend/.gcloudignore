@@ -1,0 +1,23 @@
+# gcloud でデプロイ時に除外するファイル
+
+.gcloudignore
+.git
+.gitignore
+
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+venv/
+env/
+ENV/
+
+.env
+.env.*
+
+README.md
+*.md
+
+.DS_Store
+*.log

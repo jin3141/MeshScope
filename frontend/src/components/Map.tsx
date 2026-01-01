@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 import maplibregl from 'maplibre-gl';
 import type { MeshStatistics } from '../types';
 import { apiClient } from '../api';
+import { generateMockStatistics } from '../mockData';
 
 interface MapProps {
   onMeshSelect?: (stats: MeshStatistics) => void;
@@ -82,7 +83,16 @@ export function Map({ onMeshSelect }: MapProps) {
 
       try {
         const { lng, lat } = e.lngLat;
-        const stats = await apiClient.getMeshStatistics(lat, lng);
+        let stats: MeshStatistics;
+
+        try {
+          // バックエンドAPIからデータ取得を試行
+          stats = await apiClient.getMeshStatistics(lat, lng);
+        } catch (apiError) {
+          // APIエラー時はモックデータを使用
+          console.warn('API not available, using mock data:', apiError);
+          stats = generateMockStatistics(lat, lng);
+        }
 
         // GeoJSONソースを更新
         const source = map.current.getSource('mesh-source') as maplibregl.GeoJSONSource;
@@ -106,7 +116,7 @@ export function Map({ onMeshSelect }: MapProps) {
         // 親コンポーネントに通知
         onMeshSelect?.(stats);
       } catch (err) {
-        console.error('Error fetching mesh statistics:', err);
+        console.error('Error processing mesh data:', err);
         setError(err instanceof Error ? err.message : 'Unknown error');
       } finally {
         setIsLoading(false);

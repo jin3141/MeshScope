@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+
+# 環境ファイル
+.env
+.env.*
+
+# Git
+.git/
+.gitignore
+
+# ドキュメント
+README.md
+*.md
+
+# その他
+.DS_Store
+*.log
