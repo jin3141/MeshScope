@@ -32,7 +32,12 @@ MeshScopeは、e-Stat（政府統計の総合窓口）のデータを活用し�
 - **FastAPI** (Python): REST API
 - **HTTPX**: HTTP通信
 - **e-Stat API**: 政府統計データの取得
-- **推奨ホスティング**: Render / Railway / Vercel
+- **推奨ホスティング**: GCP Cloud Run（無料枠あり） / Render / Vercel
+
+**特徴:**
+- モックデータフォールバック機能（APIが使えない場合も動作）
+- Docker対応（Cloud Run最適化済み）
+- 課金最小化設定（auto-scale to zero）
 
 ## プロジェクト構成
 
@@ -136,7 +141,32 @@ base: process.env.NODE_ENV === 'production' ? '/MeshScope/' : '/',
 
 ## デプロイ
 
-### バックエンドのデプロイ (Render)
+### バックエンドのデプロイ
+
+#### オプション1: GCP Cloud Run（推奨・無料枠あり）
+
+**課金を最小限に抑える設定を含む**完全なデプロイガイド:
+
+📘 **[GCP_DEPLOYMENT.md](./GCP_DEPLOYMENT.md)** を参照してください
+
+クイックスタート:
+```bash
+cd backend
+export GCP_PROJECT_ID="your-project-id"
+export GITHUB_PAGES_URL="https://yourusername.github.io"
+export ESTAT_API_KEY="your_estat_api_key"
+./deploy-gcp.sh
+```
+
+**特徴:**
+- ✅ 無料枠: 月間 200万リクエスト
+- ✅ 自動スケール（未使用時は課金ゼロ）
+- ✅ HTTPS対応
+- ⚠️ クレジットカード登録必須
+
+詳細は [GCP_DEPLOYMENT.md](./GCP_DEPLOYMENT.md) を参照
+
+#### オプション2: Render
 
 1. [Render](https://render.com/)でアカウント作成
 2. 新しいWeb Serviceを作成
